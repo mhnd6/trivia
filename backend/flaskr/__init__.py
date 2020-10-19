@@ -9,7 +9,7 @@ from models import setup_db, Question, Category
 
 QUESTIONS_PER_PAGE = 10
 
-# helper paginating method to return 10 questions per page
+# helper paginating function to return 10 questions per page
 
 
 def paginate_questions(request, selection):
@@ -21,6 +21,8 @@ def paginate_questions(request, selection):
     current_questions = questions[start:end]
 
     return current_questions
+
+# helper function to return all available categories
 
 
 def get_categories():
