@@ -97,7 +97,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
 
     def test_get_questions_Category(self):
-        res = self.client().post('/categories/1/questions')
+        res = self.client().get('/categories/1/questions')
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -106,7 +106,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(len(data['questions']))
 
     def test_fail_get_questions_Category(self):
-        res = self.client().post('/categories/1000/questions')
+        res = self.client().get('/categories/1000/questions')
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 404)
