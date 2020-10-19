@@ -1,9 +1,10 @@
 .vscode
 __pycache__
 venv
-.ini
-env
-.exe
+/env
+*.ini
+*.exe
+*.txt
 
 # OS generated files #
 ######################
