@@ -5,6 +5,7 @@ venv
 *.ini
 *.exe
 *.txt
+file.txt
 
 # OS generated files #
 ######################
