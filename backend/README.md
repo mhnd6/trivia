@@ -84,7 +84,8 @@ The API will return three error types when request fail:
 #### GET /categories
 
 - General:
-  - Return a list of categories, success value.
+  - Return all available categories, and success value.
+- Parameters: None.
 - Sample: curl http://127.0.0.1:5000/categories
 
 ```
@@ -106,6 +107,7 @@ The API will return three error types when request fail:
 - General:
   - Return a list of questions, success value, total questions, and categories
   - Results are paginated in groups of 10. Include a request argument to choose page number, starting from 1.
+    Parameters: None.
 - Sample: curl http://127.0.0.1:5000/questions
 
 ```
@@ -198,13 +200,183 @@ The API will return three error types when request fail:
 #### DELETE /questions/{question_id}
 
 - General:
-  - DELETE question using a question ID.
+  - DELETE question by question ID, and return question id, success value and questions array.
+- Parameters: question id
 - Sample: curl http://127.0.0.1:5000/questions/1 -X DELETE
 
 ```
 {
  'success': True,
  'deleted': 1,
+}
+```
+
+#### POST /questions
+
+- General:
+  - Search for a question by search term, and return questions array, success value.
+- Parameters: search term
+- Sample: curl -d '{"searchTerm":"movie"}' -H "Content-Type: application/json" -X POST http://127.0.0.1:5000/questions
+
+```
+{
+  "questions": [
+    {
+      "answer": "Apollo 13",
+      "category": 5,
+      "difficulty": 4,
+      "id": 2,
+      "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"
+    }
+  ],
+  "success": true,
+  "total_questions": 1
+}
+```
+
+#### POST /questions/add
+
+- General:
+  - Create new question by search term, and return question id, questions array, success value.
+- Parameters:
+  - Question
+  - Answer
+  - Categor
+  - Difficulty.
+- Sample: curl -d '{"question":"test", "answer":"test", "difficulty":1, "category": 1}' -H "Content-Type: application/json" -X POST http://127.0.0.1:5000/questions/add
+
+```
+{
+  "created": 47,
+  "questions": [
+    {
+      "answer": "Apollo 13",
+      "category": 5,
+      "difficulty": 4,
+      "id": 2,
+      "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"
+    },
+    {
+      "answer": "Tom Cruise",
+      "category": 5,
+      "difficulty": 4,
+      "id": 4,
+      "question": "What actor did author Anne Rice first denounce, then praise in the role of her beloved Lestat?"
+    },
+    {
+      "answer": "Maya Angelou",
+      "category": 4,
+      "difficulty": 2,
+      "id": 5,
+      "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"
+    },
+    {
+      "answer": "Edward Scissorhands",
+      "category": 5,
+      "difficulty": 3,
+      "id": 6,
+      "question": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?"
+    },
+    {
+      "answer": "Muhammad Ali",
+      "category": 4,
+      "difficulty": 1,
+      "id": 9,
+      "question": "What boxer's original name is Cassius Clay?"
+    },
+    {
+      "answer": "Brazil",
+      "category": 6,
+      "difficulty": 3,
+      "id": 10,
+      "question": "Which is the only team to play in every soccer World Cup tournament?"
+    },
+    {
+      "answer": "Uruguay",
+      "category": 6,
+      "difficulty": 4,
+      "id": 11,
+      "question": "Which country won the first ever soccer World Cup in 1930?"
+    },
+    {
+      "answer": "George Washington Carver",
+      "category": 4,
+      "difficulty": 2,
+      "id": 12,
+      "question": "Who invented Peanut Butter?"
+    },
+    {
+      "answer": "Lake Victoria",
+      "category": 3,
+      "difficulty": 2,
+      "id": 13,
+      "question": "What is the largest lake in Africa?"
+    },
+    {
+      "answer": "The Palace of Versailles",
+      "category": 3,
+      "difficulty": 3,
+      "id": 14,
+      "question": "In which royal palace would you find the Hall of Mirrors?"
+    }
+  ],
+  "success": true,
+  "total_questions": 22
+}
+
+```
+
+#### GET /categories/category_id/questions
+
+- General:
+  - Return questions based on category, it will return success value and questions array.
+- Parameters:
+  - Category id
+- Sample: curl http://127.0.0.1:5000/categories/6/questions
+
+```
+{
+  "questions": [
+    {
+      "answer": "Brazil",
+      "category": 6,
+      "difficulty": 3,
+      "id": 10,
+      "question": "Which is the only team to play in every soccer World Cup tournament?"
+    },
+    {
+      "answer": "Uruguay",
+      "category": 6,
+      "difficulty": 4,
+      "id": 11,
+      "question": "Which country won the first ever soccer World Cup in 1930?"
+    }
+  ],
+  "success": true,
+  "total_questions": 22
+}
+
+```
+
+#### POST /quizzes
+
+- General:
+  - Return one random question at a time based on category, it will return success value and the question.
+- Parameters:
+  - previous_questions
+  - quiz_category
+- Sample: curl -d '{"previous_questions":[], "quiz_category":{"type":"click", "id":0}}' -H "Content-Type: application/json" -X POST http://127.0.0.1:5000/quizzes
+
+```
+{
+  "question": {
+    "answer": "Edward Scissorhands",
+    "category": 5,
+    "difficulty": 3,
+    "id": 6,
+    "question": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?"
+  },
+  "success": true
 }
 ```
 
