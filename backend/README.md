@@ -200,8 +200,9 @@ The API will return three error types when request fail:
 #### DELETE /questions/{question_id}
 
 - General:
-  - DELETE question by question ID, and return question id, success value and questions array.
-- Parameters: question id
+  - Delete question by question id, and return the deleted question id, success value and questions array.
+- Parameters:
+  - Question id
 - Sample: curl http://127.0.0.1:5000/questions/1 -X DELETE
 
 ```
@@ -215,7 +216,8 @@ The API will return three error types when request fail:
 
 - General:
   - Search for a question by search term, and return questions array, success value.
-- Parameters: search term
+- Parameters:
+  - Search term
 - Sample: curl -d '{"searchTerm":"movie"}' -H "Content-Type: application/json" -X POST http://127.0.0.1:5000/questions
 
 ```
@@ -237,12 +239,12 @@ The API will return three error types when request fail:
 #### POST /questions/add
 
 - General:
-  - Create new question by search term, and return question id, questions array, success value.
+  - Create a new question, and return the created question id, questions array, success value.
 - Parameters:
   - Question
   - Answer
   - Categor
-  - Difficulty.
+  - Difficulty
 - Sample: curl -d '{"question":"test", "answer":"test", "difficulty":1, "category": 1}' -H "Content-Type: application/json" -X POST http://127.0.0.1:5000/questions/add
 
 ```
