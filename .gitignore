@@ -1,6 +1,9 @@
 .vscode
 __pycache__
 venv
+.ini
+env
+.exe
 
 # OS generated files #
 ######################
@@ -11,6 +14,3 @@ venv
 .Trashes
 ehthumbs.db
 Thumbs.db
-.ini
-env
-.exe
