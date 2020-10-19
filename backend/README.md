@@ -61,6 +61,18 @@ Setting the `FLASK_APP` variable to `flaskr` directs flask to use the `flaskr` d
 - Base URL: At present this app can only run locally. The backend app is hosted at the default, http://127.0.0.1:5000/ .
 - Authentication: This version of the application doesn't require authentication.
 
+### Error Handling
+
+Errors are returned as JSON objects in the following format:
+
+```
+{
+    "success": False,
+    "error: 404,
+    "message": "not found
+    }
+```
+
 ## Testing
 
 To run the tests, run
