@@ -62,12 +62,13 @@ def create_app(test_config=None):
                 'success': True,
                 'categories': categories
             })
-        except:
+        except Exception:
             abort(404)
 
-      # GET requests for questions,
+    # GET requests for questions,
     @app.route('/questions', methods=['GET'])
     def retrieve_questions():
+
         selection = Question.query.order_by(Question.id).all()
         current_questions = paginate_questions(request, selection)
 
@@ -83,7 +84,7 @@ def create_app(test_config=None):
             'categories': categories
         })
 
-      # DELETE question using a question ID.
+    # DELETE question using a question ID.
     @app.route('/questions/<int:question_id>', methods=['DELETE'])
     def delete_question(question_id):
         try:
@@ -101,12 +102,30 @@ def create_app(test_config=None):
                 'total_questions': len(Question.query.all())
             })
 
-        except:
+        except Exception:
+            abort(422)
+
+    # POST endpoint to get questions based on a search term.
+    @app.route('/questions', methods=['POST'])
+    def search_questions():
+        body = request.get_json()
+        search = body.get('searchTerm', None)
+
+        try:
+            selection = Question.query.order_by(Question.id).filter(
+                Question.question.ilike('%{}%'.format(search)))
+            current_questions = paginate_questions(request, selection)
+
+            return jsonify({
+                'success': True,
+                'questions': current_questions,
+                'total_questions': len(selection.all())
+            })
+        except Exception:
             abort(422)
 
     # Create an endpoint to POST a new question,
-    # POST endpoint to get questions based on a search term.
-    @app.route('/questions', methods=['POST'])
+    @app.route('/questions/add', methods=['POST'])
     def create_question():
         body = request.get_json()
 
@@ -115,41 +134,27 @@ def create_app(test_config=None):
         category = body.get('category', None)
         difficulty = body.get('difficulty', None)
 
-        search = body.get('searchTerm', None)
-
-        # if search term was included then do a search rather then create
         try:
-            if search:
-                selection = Question.query.order_by(Question.id).filter(
-                    Question.question.ilike('%{}%'.format(search)))
-                current_questions = paginate_questions(request, selection)
+            newQuestion = Question(
+                question=question,
+                answer=answer,
+                category=category,
+                difficulty=difficulty
+            )
 
-                return jsonify({
-                    'success': True,
-                    'questions': current_questions,
-                    'total_questions': len(selection.all())
-                })
-            else:
-                newQuestion = Question(
-                    question=question,
-                    answer=answer,
-                    category=category,
-                    difficulty=difficulty
-                )
+            newQuestion.insert()
 
-                newQuestion.insert()
+            selection = Question.query.order_by(Question.id).all()
+            current_questions = paginate_questions(request, selection)
 
-                selection = Question.query.order_by(Question.id).all()
-                current_questions = paginate_questions(request, selection)
+            return jsonify({
+                'success': True,
+                'created': newQuestion.id,
+                'questions': current_questions,
+                'total_questions': len(Question.query.all())
+            })
 
-                return jsonify({
-                    'success': True,
-                    'created': newQuestion.id,
-                    'questions': current_questions,
-                    'total_questions': len(Question.query.all())
-                })
-
-        except:
+        except Exception:
             abort(422)
 
     # get questions based on category.
@@ -174,7 +179,7 @@ def create_app(test_config=None):
     # and return a random questions within the given category,
     # if provided, and that is not one of the previous questions.
     @app.route('/quizzes', methods=['POST'])
-    def get_quiz():
+    def get_play_quiz():
         body = request.get_json()
         try:
             previous_questions = body.get('previous_questions', None)
@@ -188,7 +193,7 @@ def create_app(test_config=None):
                 questions = Question.query.filter(
                     Question.category == categoryID).all()
 
-            # if the length of previous questions array == number of questions then force end the quiz
+            # Force End the quiz when all qustions showed up
             if len(previous_questions) == len(questions):
                 return jsonify({
                     'end': True
@@ -197,7 +202,7 @@ def create_app(test_config=None):
             # get a random question
             question = random.choice(questions)
 
-            # the next block of code will check if the question inside the previous questions array
+            # Check if the question has been chosen
             check = False
             while not check:
                 if question.id in previous_questions:
@@ -209,7 +214,7 @@ def create_app(test_config=None):
                 'success': True,
                 'question': question.format()
             })
-        except:
+        except Exception:
             abort(400)
 
     # handling errors
